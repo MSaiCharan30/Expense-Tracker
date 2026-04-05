@@ -117,6 +117,17 @@ select:focus {
   margin-bottom: 20px;
 }
 
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.btn-export {
+  background: #27ae60;
+  color: #fff;
+}
+
 .total {
   font-size: 1.1rem;
   font-weight: 700;

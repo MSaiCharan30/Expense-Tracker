@@ -1,0 +1,499 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: #f0f2f5;
+  color: #1a1a2e;
+  min-height: 100vh;
+  padding: 24px 16px;
+}
+
+/* ── Layout ──────────────────────────────────────────────── */
+.container {
+  max-width: 860px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1a1a2e;
+}
+
+h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+/* ── Card ────────────────────────────────────────────────── */
+.card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+/* ── Form ────────────────────────────────────────────────── */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.form-group:last-of-type {
+  margin-bottom: 0;
+}
+
+label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #555;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="date"],
+select {
+  padding: 9px 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  color: #1a1a2e;
+  transition: border-color 0.15s;
+  background: #fff;
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border-color: #6c63ff;
+}
+
+/* ── Buttons ─────────────────────────────────────────────── */
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s, background 0.15s;
+}
+
+.btn:hover { opacity: 0.88; }
+
+.btn-primary {
+  background: #6c63ff;
+  color: #fff;
+  margin-top: 8px;
+}
+
+.btn-danger {
+  background: transparent;
+  color: #e74c3c;
+  padding: 4px 8px;
+  font-size: 0.8rem;
+}
+
+.btn-export {
+  background: #6c63ff;
+  color: #fff;
+}
+
+.btn-ghost {
+  background: #f0f2f5;
+  color: #555;
+}
+
+.link-btn {
+  background: none;
+  border: none;
+  font-size: 0.8rem;
+  color: #6c63ff;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+}
+
+/* ── Dashboard header ────────────────────────────────────── */
+.dashboard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.total {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #6c63ff;
+}
+
+/* ── Expense Table ───────────────────────────────────────── */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  text-align: left;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 8px 12px;
+  border-bottom: 1px solid #eee;
+}
+
+td {
+  padding: 12px;
+  font-size: 0.95rem;
+  border-bottom: 1px solid #f5f5f5;
+  vertical-align: middle;
+}
+
+tr:last-child td { border-bottom: none; }
+
+tbody tr:not(#empty-row):hover { background: #fafafa; }
+
+.amount-cell {
+  font-weight: 600;
+  color: #e74c3c;
+}
+
+.empty-message {
+  text-align: center;
+  color: #aaa;
+  padding: 32px 0;
+}
+
+/* ── Modal ───────────────────────────────────────────────── */
+#export-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+}
+
+#export-modal.open {
+  display: flex;
+}
+
+.modal-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  animation: fadeIn 0.2s ease;
+}
+
+.modal-panel {
+  position: relative;
+  background: #fff;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 680px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  animation: slideUp 0.25s ease;
+  overflow: hidden;
+  margin: 16px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(24px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+/* Modal header */
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid #eee;
+  flex-shrink: 0;
+}
+
+.modal-header h2 {
+  font-size: 1.15rem;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #999;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0 4px;
+  transition: color 0.15s;
+}
+
+.modal-close:hover { color: #333; }
+
+/* Modal body */
+.modal-body {
+  overflow-y: auto;
+  padding: 0 24px;
+  flex: 1;
+}
+
+.modal-section {
+  padding: 20px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.modal-section:last-child { border-bottom: none; }
+
+.section-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #999;
+  margin-bottom: 12px;
+}
+
+/* Filters */
+.filter-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.date-filters {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.date-filters .form-group {
+  margin-bottom: 0;
+}
+
+.category-filters {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.category-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.checkbox-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 130px;
+  overflow-y: auto;
+}
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: #333;
+  cursor: pointer;
+}
+
+.checkbox-item input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #6c63ff;
+  cursor: pointer;
+}
+
+/* Format pills */
+.format-group {
+  display: flex;
+  gap: 10px;
+}
+
+.format-pill {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.format-pill input[type="radio"] {
+  display: none;
+}
+
+.format-pill span {
+  display: block;
+  padding: 8px 22px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #888;
+  transition: all 0.15s;
+}
+
+.format-pill input:checked + span {
+  border-color: #6c63ff;
+  background: #f0eeff;
+  color: #6c63ff;
+}
+
+.format-pill:hover span {
+  border-color: #aaa;
+  color: #555;
+}
+
+/* Filename */
+.filename-row {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.filename-input {
+  flex: 1;
+  border-radius: 8px 0 0 8px !important;
+  border-right: none !important;
+}
+
+.format-ext {
+  padding: 9px 12px;
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 0 8px 8px 0;
+  font-size: 0.9rem;
+  color: #888;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Preview */
+.preview-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.summary-bar {
+  background: #f0eeff;
+  color: #6c63ff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 20px;
+}
+
+.preview-wrapper {
+  border: 1px solid #eee;
+  border-radius: 8px;
+  overflow: hidden;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.preview-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.preview-table th {
+  font-size: 0.75rem;
+  padding: 8px 10px;
+  background: #fafafa;
+  position: sticky;
+  top: 0;
+}
+
+.preview-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #f5f5f5;
+  font-size: 0.85rem;
+}
+
+.preview-table tr:last-child td { border-bottom: none; }
+
+/* Modal footer */
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px 24px;
+  border-top: 1px solid #eee;
+  flex-shrink: 0;
+}
+
+/* Export action button */
+.btn-export-action {
+  background: #6c63ff;
+  color: #fff;
+  min-width: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-export-action:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+/* Spinner */
+.btn-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255,255,255,0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  display: inline-block;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .form-row,
+  .filter-grid {
+    grid-template-columns: 1fr;
+  }
+}

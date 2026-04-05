@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Expense Tracker</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Expense Tracker</h1>
+
+    <!-- Add Expense Form -->
+    <section class="card">
+      <h2>Add Expense</h2>
+      <form id="expense-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="date">Date</label>
+            <input type="date" id="date" required />
+          </div>
+          <div class="form-group">
+            <label for="category">Category</label>
+            <select id="category" required>
+              <option value="">Select...</option>
+              <option>Food</option>
+              <option>Transport</option>
+              <option>Housing</option>
+              <option>Entertainment</option>
+              <option>Health</option>
+              <option>Shopping</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="amount">Amount ($)</label>
+            <input type="number" id="amount" min="0.01" step="0.01" placeholder="0.00" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="description">Description</label>
+          <input type="text" id="description" placeholder="What did you spend on?" required />
+        </div>
+        <button type="submit" class="btn btn-primary">Add Expense</button>
+      </form>
+    </section>
+
+    <!-- Dashboard -->
+    <section class="card">
+      <div class="dashboard-header">
+        <h2>Expenses</h2>
+        <div class="header-actions">
+          <span id="total-display" class="total">Total: $0.00</span>
+          <button id="export-data-btn" class="btn btn-export">&#8659; Export Data</button>
+        </div>
+      </div>
+
+      <table id="expense-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Category</th>
+            <th>Amount</th>
+            <th>Description</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="expense-list">
+          <tr id="empty-row">
+            <td colspan="5" class="empty-message">No expenses yet. Add one above!</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </div>
+
+  <!-- Export Modal -->
+  <div id="export-modal" aria-modal="true" role="dialog" aria-labelledby="modal-title">
+    <div class="modal-overlay" id="modal-overlay"></div>
+    <div class="modal-panel">
+
+      <div class="modal-header">
+        <h2 id="modal-title">Export Data</h2>
+        <button class="modal-close" id="modal-close" aria-label="Close">&times;</button>
+      </div>
+
+      <div class="modal-body">
+
+        <!-- Filters -->
+        <div class="modal-section">
+          <h3 class="section-label">Filters</h3>
+          <div class="filter-grid">
+            <div class="date-filters">
+              <div class="form-group">
+                <label for="filter-start">From</label>
+                <input type="date" id="filter-start" />
+              </div>
+              <div class="form-group">
+                <label for="filter-end">To</label>
+                <input type="date" id="filter-end" />
+              </div>
+            </div>
+            <div class="category-filters">
+              <div class="category-header">
+                <label>Categories</label>
+                <button type="button" id="toggle-all-btn" class="link-btn">Deselect All</button>
+              </div>
+              <div id="category-checkboxes" class="checkbox-list"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Format -->
+        <div class="modal-section">
+          <h3 class="section-label">Format</h3>
+          <div class="format-group" id="format-group">
+            <label class="format-pill">
+              <input type="radio" name="format" value="csv" checked />
+              <span>CSV</span>
+            </label>
+            <label class="format-pill">
+              <input type="radio" name="format" value="json" />
+              <span>JSON</span>
+            </label>
+            <label class="format-pill">
+              <input type="radio" name="format" value="pdf" />
+              <span>PDF</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Filename -->
+        <div class="modal-section">
+          <h3 class="section-label">Filename</h3>
+          <div class="filename-row">
+            <input type="text" id="export-filename" class="filename-input" placeholder="expenses-2024-01-01" />
+            <span id="format-ext" class="format-ext">.csv</span>
+          </div>
+        </div>
+
+        <!-- Preview -->
+        <div class="modal-section">
+          <div class="preview-header">
+            <h3 class="section-label">Preview</h3>
+            <span id="summary-bar" class="summary-bar">0 records · $0.00</span>
+          </div>
+          <div class="preview-wrapper">
+            <table class="preview-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Category</th>
+                  <th>Amount</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody id="preview-list">
+                <tr><td colspan="4" class="empty-message">No records match the current filters.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-ghost" id="modal-cancel">Cancel</button>
+        <button class="btn btn-export-action" id="do-export-btn" disabled>
+          <span class="btn-label">Export</span>
+          <span class="btn-spinner" hidden></span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script src="export.js"></script>
+</body>
+</html>
