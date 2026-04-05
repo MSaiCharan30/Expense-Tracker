@@ -77,6 +77,30 @@ document.getElementById('expense-list').addEventListener('click', e => {
   if (btn) removeExpense(Number(btn.dataset.id));
 });
 
+// CSV export
+document.getElementById('export-btn').addEventListener('click', () => {
+  const expenses = loadExpenses();
+  if (expenses.length === 0) {
+    alert('No expenses to export.');
+    return;
+  }
+
+  const rows = [
+    ['Date', 'Category', 'Amount', 'Description'],
+    ...expenses.map(e => [e.date, e.category, e.amount.toFixed(2), `"${e.description.replace(/"/g, '""')}"`])
+  ];
+
+  const csv = rows.map(r => r.join(',')).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `expenses-${new Date().toISOString().slice(0, 10)}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
 // Set today's date as default
 document.getElementById('date').valueAsDate = new Date();
 
